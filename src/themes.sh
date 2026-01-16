@@ -5,13 +5,14 @@ TRANSPARENT_THEME="$(tmux show-option -gv @tokyo-night-tmux_transparent)"
 
 case $SELECTED_THEME in
 "storm")
+  # ... (Keep Storm as is, or apply similar logic if you use it)
   declare -A THEME=(
     ["background"]="#24283b"
-    ["foreground"]="#a9b1d6"
+    ["foreground"]="#c0caf5" # Brighter foreground
     ["black"]="#414868"
     ["blue"]="#7aa2f7"
     ["cyan"]="#7dcfff"
-    ["green"]="#73daca"
+    ["green"]="#9ece6a"      # More vibrant green
     ["magenta"]="#bb9af7"
     ["red"]="#f7768e"
     ["white"]="#a9b1d6"
@@ -29,6 +30,7 @@ case $SELECTED_THEME in
   ;;
 
 "day")
+  # ... (Keep Day as is)
   declare -A THEME=(
     ["background"]="#d5d6db"
     ["foreground"]="#343b58"
@@ -53,26 +55,34 @@ case $SELECTED_THEME in
   ;;
 
 *)
-  # Default to night theme
+  # === HIGH CONTRAST NIGHT THEME ===
   declare -A THEME=(
-    ["background"]="#1A1B26"
-    ["foreground"]="#a9b1d6"
-    ["black"]="#414868"
+    # 1. Background: Darker (#16161e) instead of (#1a1b26) for deeper contrast
+    ["background"]="#16161e"
+
+    # 2. Foreground: Brighter (#c0caf5) instead of (#a9b1d6)
+    ["foreground"]="#c0caf5"
+
+    # 3. "Black" (Used for bubbles/inactive): Slightly lighter (#2f334d) to stand out against the new dark bg
+    ["black"]="#2f334d"
+
+    # 4. Accents: Pushed slightly towards neon for readability
     ["blue"]="#7aa2f7"
     ["cyan"]="#7dcfff"
-    ["green"]="#73daca"
+    ["green"]="#9ece6a"  # Brighter Green (was #73daca)
     ["magenta"]="#bb9af7"
     ["red"]="#f7768e"
     ["white"]="#c0caf5"
     ["yellow"]="#e0af68"
 
-    ["bblack"]="#2A2F41"
+    # 5. Bold Colors (Used in active bubbles)
+    ["bblack"]="#15161e" # The darkest dark (matches bg)
     ["bblue"]="#7aa2f7"
     ["bcyan"]="#7dcfff"
-    ["bgreen"]="#41a6b5"
+    ["bgreen"]="#9ece6a"
     ["bmagenta"]="#bb9af7"
-    ["bred"]="#ff9e64"
-    ["bwhite"]="#787c99"
+    ["bred"]="#db4b4b"   # Deep Red for errors
+    ["bwhite"]="#ffffff" # Pure White
     ["byellow"]="#e0af68"
   )
   ;;

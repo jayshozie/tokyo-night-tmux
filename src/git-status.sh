@@ -9,7 +9,8 @@ source "$CURRENT_DIR/../lib/coreutils-compat.sh"
 source "$CURRENT_DIR/themes.sh"
 
 cd "$1" || exit 1
-RESET="#[fg=${THEME[foreground]},bg=${THEME[background]},nobold,noitalics,nounderscore,nodim]"
+# Redefine RESET to avoid forcing the default background, allowing us to stay inside the bubble
+RESET="#[nobold,noitalics,nounderscore,nodim]"
 BRANCH=$(git rev-parse --abbrev-ref HEAD 2>/dev/null)
 STATUS=$(git status --porcelain 2>/dev/null | grep -cE "^(M| M)")
 
@@ -36,20 +37,21 @@ fi
 
 UNTRACKED_COUNT="$(git ls-files --other --exclude-standard | wc -l | bc)"
 
+# Stats remain floating (outside the bubble) so we keep their original backgrounds
 if [[ $CHANGED_COUNT -gt 0 ]]; then
-  STATUS_CHANGED="${RESET}#[fg=${THEME[yellow]},bg=${THEME[background]},bold] ${CHANGED_COUNT} "
+  STATUS_CHANGED="#[fg=${THEME[yellow]},bg=${THEME[background]},bold]  ${CHANGED_COUNT}"
 fi
 
 if [[ $INSERTIONS_COUNT -gt 0 ]]; then
-  STATUS_INSERTIONS="${RESET}#[fg=${THEME[green]},bg=${THEME[background]},bold] ${INSERTIONS_COUNT} "
+  STATUS_INSERTIONS="#[fg=${THEME[green]},bg=${THEME[background]},bold]  ${INSERTIONS_COUNT}"
 fi
 
 if [[ $DELETIONS_COUNT -gt 0 ]]; then
-  STATUS_DELETIONS="${RESET}#[fg=${THEME[red]},bg=${THEME[background]},bold] ${DELETIONS_COUNT} "
+  STATUS_DELETIONS="#[fg=${THEME[red]},bg=${THEME[background]},bold]  ${DELETIONS_COUNT}"
 fi
 
 if [[ $UNTRACKED_COUNT -gt 0 ]]; then
-  STATUS_UNTRACKED="${RESET}#[fg=${THEME[black]},bg=${THEME[background]},bold] ${UNTRACKED_COUNT} "
+  STATUS_UNTRACKED="#[fg=${THEME[black]},bg=${THEME[background]},bold]  ${UNTRACKED_COUNT}"
 fi
 
 # Determine repository sync status
@@ -60,13 +62,9 @@ if [[ $SYNC_MODE -eq 0 ]]; then
   else
     LAST_FETCH=$(stat -c %Y .git/FETCH_HEAD | bc)
     NOW=$(date +%s | bc)
-
-    # if 5 minutes have passed since the last fetch
     if [[ $((NOW - LAST_FETCH)) -gt 300 ]]; then
       git fetch --atomic origin --negotiation-tip=HEAD
     fi
-
-    # Check if the remote branch is ahead of the local branch
     REMOTE_DIFF="$(git diff --numstat "${BRANCH}" "origin/${BRANCH}" 2>/dev/null)"
     if [[ -n $REMOTE_DIFF ]]; then
       SYNC_MODE=3
@@ -74,22 +72,18 @@ if [[ $SYNC_MODE -eq 0 ]]; then
   fi
 fi
 
-# Set the status indicator based on the sync mode
 case "$SYNC_MODE" in
-1)
-  REMOTE_STATUS="$RESET#[bg=${THEME[background]},fg=${THEME[bred]},bold]▒ 󱓎"
-  ;;
-2)
-  REMOTE_STATUS="$RESET#[bg=${THEME[background]},fg=${THEME[red]},bold]▒ 󰛃"
-  ;;
-3)
-  REMOTE_STATUS="$RESET#[bg=${THEME[background]},fg=${THEME[magenta]},bold]▒ 󰛀"
-  ;;
-*)
-  REMOTE_STATUS="$RESET#[bg=${THEME[background]},fg=${THEME[green]},bold]▒ "
-  ;;
+1) REMOTE_STATUS="#[fg=${THEME[bred]},bold]󱓎" ;;
+2) REMOTE_STATUS="#[fg=${THEME[red]},bold]󰛃" ;;
+3) REMOTE_STATUS="#[fg=${THEME[magenta]},bold]󰛀" ;;
+*) REMOTE_STATUS="#[fg=${THEME[green]},bold]" ;;
 esac
 
 if [[ -n $BRANCH ]]; then
-  echo "$REMOTE_STATUS $RESET$BRANCH $STATUS_CHANGED$STATUS_INSERTIONS$STATUS_DELETIONS$STATUS_UNTRACKED"
+  # === THE BUBBLE MODIFICATION ===
+  # 1. Start Bubble (Grey)
+  # 2. Icon (Colored) + Branch Name (Grey BG)
+  # 3. End Bubble
+  # 4. Floating Stats
+  echo "#[fg=${THEME[bblack]},bg=${THEME[background]}]#[fg=${THEME[foreground]},bg=${THEME[bblack]}]${REMOTE_STATUS} $RESET#[fg=${THEME[foreground]},bg=${THEME[bblack]}]${BRANCH}#[fg=${THEME[bblack]},bg=${THEME[background]},nobold]$STATUS_CHANGED$STATUS_INSERTIONS$STATUS_DELETIONS$STATUS_UNTRACKED "
 fi

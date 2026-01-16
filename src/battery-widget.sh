@@ -8,10 +8,13 @@ ENABLED=$(tmux show-option -gv @tokyo-night-tmux_show_battery_widget 2>/dev/null
 ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/.."
 . "${ROOT_DIR}/lib/coreutils-compat.sh"
 
+# Load themes to use consistent colors
+CURRENT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+source $CURRENT_DIR/themes.sh
+
 # Get values from tmux config or set defaults
 BATTERY_NAME=$(tmux show-option -gv @tokyo-night-tmux_battery_name 2>/dev/null)
 BATTERY_LOW=$(tmux show-option -gv @tokyo-night-tmux_battery_low_threshold 2>/dev/null)
-RESET="#[fg=brightwhite,bg=#15161e,nobold,noitalics,nounderscore,nodim]"
 
 DISCHARGING_ICONS=("󰁺" "󰁻" "󰁼" "󰁽" "󰁾" "󰁿" "󰂀" "󰂁" "󰂂" "󰁹")
 CHARGING_ICONS=("󰢜" "󰂆" "󰂇" "󰂈" "󰢝" "󰂉" "󰢞" "󰂊" "󰂋" "󰂅")
@@ -88,12 +91,10 @@ get_battery_stats() {
 # Fetch the battery status and percentage
 read -r BATTERY_STATUS BATTERY_PERCENTAGE < <(get_battery_stats "$BATTERY_NAME")
 
-# Ensure percentage is a number
 if ! [[ $BATTERY_PERCENTAGE =~ ^[0-9]+$ ]]; then
   BATTERY_PERCENTAGE=0
 fi
 
-# Determine icon and color based on battery status and percentage
 case "$BATTERY_STATUS" in
 "Charging" | "Charged" | "charging" | "Charged")
   ICON="${CHARGING_ICONS[$((BATTERY_PERCENTAGE / 10))]}"
@@ -109,14 +110,14 @@ case "$BATTERY_STATUS" in
   ;;
 esac
 
-# Set color based on battery percentage
+# === BUBBLE MODIFICATION ===
+# Determine BUBBLE_COLOR based on percentage
 if [[ $BATTERY_PERCENTAGE -lt $BATTERY_LOW ]]; then
-  color="#[fg=red,bg=default,bold]"
+  BUBBLE_COLOR="${THEME[red]}"
 elif [[ $BATTERY_PERCENTAGE -ge 100 ]]; then
-  color="#[fg=green,bg=default]"
+  BUBBLE_COLOR="${THEME[green]}"
 else
-  color="#[fg=yellow,bg=default]"
+  BUBBLE_COLOR="${THEME[yellow]}"
 fi
 
-# Print the battery status with some extra spaces for padding
-echo "${color}░ ${ICON}${RESET} #[bg=default] ${BATTERY_PERCENTAGE}% "
+echo "#[fg=${BUBBLE_COLOR},bg=${THEME[background]}]#[fg=${THEME[bblack]},bg=${BUBBLE_COLOR},bold]${ICON} ${BATTERY_PERCENTAGE}%#[fg=${BUBBLE_COLOR},bg=${THEME[background]},nobold]"
