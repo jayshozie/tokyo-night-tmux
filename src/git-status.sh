@@ -9,7 +9,8 @@ source "$CURRENT_DIR/../lib/coreutils-compat.sh"
 source "$CURRENT_DIR/themes.sh"
 
 cd "$1" || exit 1
-# Redefine RESET to avoid forcing the default background, allowing us to stay inside the bubble
+# Redefine RESET to avoid forcing the default background, allowing it to stay
+# inside the bubble
 RESET="#[nobold,noitalics,nounderscore,nodim]"
 BRANCH=$(git rev-parse --abbrev-ref HEAD 2>/dev/null)
 STATUS=$(git status --porcelain 2>/dev/null | grep -cE "^(M| M)")
@@ -37,7 +38,7 @@ fi
 
 UNTRACKED_COUNT="$(git ls-files --other --exclude-standard | wc -l | bc)"
 
-# Stats remain floating (outside the bubble) so we keep their original backgrounds
+# Stats remain floating so keep their original backgrounds
 if [[ $CHANGED_COUNT -gt 0 ]]; then
   STATUS_CHANGED="#[fg=${THEME[yellow]},bg=${THEME[background]},bold]  ${CHANGED_COUNT}"
 fi
@@ -80,10 +81,5 @@ case "$SYNC_MODE" in
 esac
 
 if [[ -n $BRANCH ]]; then
-  # === THE BUBBLE MODIFICATION ===
-  # 1. Start Bubble (Grey)
-  # 2. Icon (Colored) + Branch Name (Grey BG)
-  # 3. End Bubble
-  # 4. Floating Stats
   echo "#[fg=${THEME[bblack]},bg=${THEME[background]}]#[fg=${THEME[foreground]},bg=${THEME[bblack]}]${REMOTE_STATUS} $RESET#[fg=${THEME[foreground]},bg=${THEME[bblack]}]${BRANCH}#[fg=${THEME[bblack]},bg=${THEME[background]},nobold]$STATUS_CHANGED$STATUS_INSERTIONS$STATUS_DELETIONS$STATUS_UNTRACKED "
 fi

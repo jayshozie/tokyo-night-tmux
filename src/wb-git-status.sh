@@ -69,11 +69,9 @@ if [[ $BUG_COUNT -gt 0 ]]; then
   BUG_STATUS="#[fg=${THEME[ghred]},bg=${THEME[background]},bold]  ${BUG_COUNT}"
 fi
 
-# === BUBBLE MODIFICATION ===
-# Grey Bubble for the icon, Floating stats
 echo "#[fg=${THEME[bblack]},bg=${THEME[background]}]#[fg=${THEME[foreground]},bg=${THEME[bblack]},bold] $RESET$PROVIDER_ICON#[fg=${THEME[bblack]},bg=${THEME[background]},nobold] $PR_STATUS$REVIEW_STATUS$ISSUE_STATUS$BUG_STATUS"
 
-# Wait extra time logic...
+# Wait extra time logic
 INTERVAL=$(tmux display -p '#{status-interval}')
 if [[ $INTERVAL -lt 20 ]]; then
   sleep 20

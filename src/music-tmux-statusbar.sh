@@ -107,20 +107,16 @@ else
   PROGRESS=$((OUTPUT_LENGTH * PERCENT / 100))
   O="$OUTPUT"
 
-  # === BUBBLE LOGIC ===
-  # Left Cap Color: Blue if progress > 0, otherwise Grey
   if [ $PROGRESS -gt 0 ]; then
      L_CAP="#[fg=$ACCENT_COLOR,bg=${THEME[background]}]"
   else
      L_CAP="#[fg=$BG_BAR,bg=${THEME[background]}]"
   fi
 
-  # Right Cap Color: Always Grey (matches the empty bar end)
   R_CAP="#[fg=$BG_BAR,bg=${THEME[background]}]"
 
   if [ $PROGRESS -le $TIME_INDEX ]; then
     # Case 1: Progress is within the Title
-    # Text on filled part (BG_COLOR) now matches 'bblack' (Active Window Text)
     echo "${L_CAP}#[nobold,fg=$BG_COLOR,bg=$ACCENT_COLOR]${O:0:PROGRESS}#[fg=$ACCENT_COLOR,bg=$BG_BAR]${O:PROGRESS:TIME_INDEX}#[fg=$TIME_COLOR,bg=$BG_BAR]$TIME${R_CAP} "
   else
     # Case 2: Progress covers Title and eats into Time

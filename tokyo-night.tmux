@@ -67,15 +67,15 @@ battery_status="#($SCRIPTS_PATH/battery-widget.sh)"
 hostname="#($SCRIPTS_PATH/hostname-widget.sh)"
 
 #+--- Bars LEFT ---+
-# Session name
-tmux set -g status-left "#[fg=${THEME[blue]},bg=${THEME[background]}]#[fg=${THEME[bblack]},bg=${THEME[blue]},bold]  #S #[fg=${THEME[blue]},bg=${THEME[background]},nobold] "
+# Session Name
+tmux set -g status-left "#[fg=${THEME[blue]},bg=${THEME[background]}]#[fg=${THEME[bblack]},bg=${THEME[blue]},bold]#{?client_prefix,󰠠 , } #S #[fg=${THEME[blue]},bg=${THEME[background]},nobold,nodim] "
 
 #+--- Windows ---+
-# Focus
-tmux set -g window-status-current-format "#[fg=${THEME[blue]},bg=${THEME[background]}]#[fg=${THEME[bblack]},bg=${THEME[blue]},bold]#{?#{==:#{pane_current_command},ssh},󰣀 , }${window_number}#W #[fg=${THEME[blue]},bg=${THEME[background]},nobold] "
-# Unfocused
-tmux set -g window-status-format "#[fg=${THEME[bblack]},bg=${THEME[background]}]#[fg=${THEME[foreground]},bg=${THEME[bblack]}]#{?#{==:#{pane_current_command},ssh},󰣀 , }${window_number}#W #[fg=${THEME[bblack]},bg=${THEME[background]}] "
+# 1. Active Window
+tmux set -g window-status-current-format "#[fg=${THEME[blue]},bg=${THEME[background]}]#[fg=${THEME[bblack]},bg=${THEME[blue]},bold]#{?#{==:#{pane_current_command},ssh},󰣀 ,${active_terminal_icon} }#I #W #[nobold]#{?window_zoomed_flag, 󰍉 ,}#[fg=${THEME[blue]},bg=${THEME[background]},nobold,nodim]"
+# 2. Inactive Window
+tmux set -g window-status-format "#[fg=${THEME[bblack]},bg=${THEME[background]}]#[fg=${THEME[foreground]},bg=${THEME[bblack]}]#{?#{==:#{pane_current_command},ssh},󰣀 ,${terminal_icon} }#I #W #[nobold,dim]#{?window_zoomed_flag, 󰍉 ,}#[fg=${THEME[yellow]}]#{?window_last_flag, 󰁯 ,}#[fg=${THEME[bblack]},bg=${THEME[background]},nobold,nodim]"
 
 #+--- Bars RIGHT ---+
 tmux set -g status-right "$battery_status$current_path$cmus_status$netspeed$git_status$wb_git_status$date_and_time"
-tmux set -g window-status-separator ""
+tmux set -g window-status-separator " "

@@ -120,4 +120,4 @@ else
   BUBBLE_COLOR="${THEME[yellow]}"
 fi
 
-echo "#[fg=${BUBBLE_COLOR},bg=${THEME[background]}]#[fg=${THEME[bblack]},bg=${BUBBLE_COLOR},bold]${ICON} ${BATTERY_PERCENTAGE}%#[fg=${BUBBLE_COLOR},bg=${THEME[background]},nobold]"
+echo "#[fg=${BUBBLE_COLOR},bg=${THEME[background]}]#[fg=${THEME[bblack]},bg=${BUBBLE_COLOR},bold]${ICON} ${BATTERY_PERCENTAGE}%#[fg=${BUBBLE_COLOR},bg=${THEME[background]},nobold] "

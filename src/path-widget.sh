@@ -23,4 +23,4 @@ if [[ ${PATH_FORMAT} == "relative" ]]; then
 fi
 
 # === BUBBLE MODIFICATION ===
-echo "#[fg=${THEME[blue]},bg=${THEME[background]}]#[fg=${THEME[bblack]},bg=${THEME[blue]},bold]  ${current_path} #[fg=${THEME[blue]},bg=${THEME[background]},nobold]"
+echo "#[fg=${THEME[blue]},bg=${THEME[background]}]#[fg=${THEME[bblack]},bg=${THEME[blue]},bold]  ${current_path} #[fg=${THEME[blue]},bg=${THEME[background]},nobold] "
