@@ -92,7 +92,7 @@ fi
 MAX_TITLE_WIDTH=25
 if [ "${#OUTPUT}" -ge $MAX_TITLE_WIDTH ]; then
   OUTPUT="$PLAY_STATE ${TITLE:0:$MAX_TITLE_WIDTH-1}"
-  OUTPUT="${OUTPUT%"${OUTPUT##*[![:space:]]}"}…"
+  OUTPUT="${OUTPUT%"${OUTPUT##*[![:space:]]}"}… "
 fi
 
 if [ -z "$OUTPUT" ]; then
