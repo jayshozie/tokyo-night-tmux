@@ -8,7 +8,7 @@ CURRENT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 source $CURRENT_DIR/themes.sh
 
 ACCENT_COLOR="${THEME[blue]}"
-SECONDARY_COLOR="${THEME[background]}"
+SECONDARY_COLOR="${THEME[bblack]}"
 BG_COLOR="${THEME[background]}"
 BG_BAR="${THEME[bblack]}"  # Changed to Grey
 TIME_COLOR="${THEME[foreground]}"

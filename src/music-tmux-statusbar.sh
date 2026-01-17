@@ -14,7 +14,7 @@ ACCENT_COLOR="${THEME[blue]}"
 SECONDARY_COLOR="${THEME[background]}"
 BG_COLOR="${THEME[bblack]}"
 BG_BAR="${THEME[bblack]}"
-TIME_COLOR="${THEME[foreground]}"
+TIME_COLOR="${THEME[blue]}"
 
 if [[ $1 =~ ^[[:digit:]]+$ ]]; then
   MAX_TITLE_WIDTH=$1

@@ -72,9 +72,9 @@ tmux set -g status-left "#[fg=${THEME[blue]},bg=${THEME[background]}]#[fg=${T
 
 #+--- Windows ---+
 # Focus
-tmux set -g window-status-current-format "#[fg=${THEME[blue]},bg=${THEME[background]}]#[fg=${THEME[bblack]},bg=${THEME[blue]},bold]#{?#{==:#{pane_current_command},ssh},󰣀 , }#I #W #[fg=${THEME[blue]},bg=${THEME[background]},nobold] "
+tmux set -g window-status-current-format "#[fg=${THEME[blue]},bg=${THEME[background]}]#[fg=${THEME[bblack]},bg=${THEME[blue]},bold]#{?#{==:#{pane_current_command},ssh},󰣀 , }${window_number}#W #[fg=${THEME[blue]},bg=${THEME[background]},nobold] "
 # Unfocused
-tmux set -g window-status-format "#[fg=${THEME[bblack]},bg=${THEME[background]}]#[fg=${THEME[foreground]},bg=${THEME[bblack]}]#{?#{==:#{pane_current_command},ssh},󰣀 , }#I #W #[fg=${THEME[bblack]},bg=${THEME[background]}] "
+tmux set -g window-status-format "#[fg=${THEME[bblack]},bg=${THEME[background]}]#[fg=${THEME[foreground]},bg=${THEME[bblack]}]#{?#{==:#{pane_current_command},ssh},󰣀 , }${window_number}#W #[fg=${THEME[bblack]},bg=${THEME[background]}] "
 
 #+--- Bars RIGHT ---+
 tmux set -g status-right "$battery_status$current_path$cmus_status$netspeed$git_status$wb_git_status$date_and_time"
